@@ -19,3 +19,8 @@ flask-wtf
 mysqlclient  # or mysql-connector-python
 gunicorn
 flask-caching
+reportlab
+pillow
+PyPDF2
+openpyxl
+xlrd
