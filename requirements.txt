@@ -20,3 +20,4 @@ markupsafe
 itsdangerous
 click
 blinker
+psycopg2-binary
