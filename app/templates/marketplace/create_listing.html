@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Create Listing{% endblock %}
+{% block content %}
+<h2>Create Produce Listing</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.crop_name.label }} {{ form.crop_name() }}
+    {{ form.quantity.label }} {{ form.quantity() }}
+    {{ form.unit.label }} {{ form.unit() }}
+    {{ form.price.label }} {{ form.price() }}
+    {{ form.location.label }} {{ form.location() }}
+    {{ form.harvest_date.label }} {{ form.harvest_date() }}
+    {{ form.description.label }} {{ form.description(rows=4) }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

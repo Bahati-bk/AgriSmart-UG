@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Farmer Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Farmer Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ reports_count }}</h3>
+                <p class="mb-0">Crop Reports</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ listings_count }}</h3>
+                <p class="mb-0">Produce Listings</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ activities_count }}</h3>
+                <p class="mb-0">Farm Records</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm bg-success text-white">
+            <div class="card-body" id="weather-card">
+                {% if weather %}
+                <h5>{{ weather.district }}</h5>
+                <p class="mb-1">{{ weather.condition }}</p>
+                <p class="mb-1">{{ weather.temperature }}°C</p>
+                <small>Humidity: {{ weather.humidity }}%</small>
+                {% else %}
+                <h5>Weather</h5>
+                <p class="mb-0">Unavailable</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4 d-flex gap-2 flex-wrap">
+    <a class="btn btn-success" href="{{ url_for('farmer.profile') }}">My Profile</a>
+    <a class="btn btn-primary" href="{{ url_for('farmer.new_crop_report') }}">New Crop Report</a>
+    <a class="btn btn-warning" href="{{ url_for('marketplace.create_listing') }}">New Listing</a>
+    <a class="btn btn-dark" href="{{ url_for('farmer.add_farm_record') }}">Add Farm Record</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4>Recent Notifications</h4>
+        {% for note in notifications %}
+        <div class="border rounded p-2 mb-2 {% if not note.is_read %}bg-light{% endif %}">
+            <strong>{{ note.title }}</strong>
+            <p class="mb-1">{{ note.message }}</p>
+            <small class="text-muted">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+        </div>
+        {% else %}
+        <p class="mb-0">No notifications yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    async function refreshWeather() {
+        try {
+            const response = await fetch("{{ url_for('api.weather') }}");
+            const result = await response.json();
+
+            if (result.success) {
+                const w = result.data;
+                document.getElementById("weather-card").innerHTML = `
+                <h5>${w.district}</h5>
+                <p class="mb-1">${w.condition}</p>
+                <p class="mb-1">${w.temperature}°C</p>
+                <small>Humidity: ${w.humidity}% · Wind: ${w.wind_speed} m/s</small>
+            `;
+            }
+        } catch (error) {
+            console.error("Weather refresh failed", error);
+        }
+    }
+
+    setInterval(refreshWeather, 60000);
+</script>
+{% endblock %}

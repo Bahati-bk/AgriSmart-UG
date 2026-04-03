@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Sales & Profitability{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Sales & Profitability</h2>
+
+<div class="mb-3 d-flex gap-2">
+    <a href="{{ url_for('farmer.export_sales_csv') }}" class="btn btn-outline-success">Export CSV</a>
+    <a href="{{ url_for('farmer.export_sales_pdf') }}" class="btn btn-outline-dark">Export PDF</a>
+</div>
+
+<form method="POST" class="card shadow-sm p-4 mb-4">
+    {{ form.hidden_tag() }}
+    <div class="row">
+        <div class="col-md-4 mb-3">{{ form.crop_name.label(class="form-label") }}{{ form.crop_name(class="form-control")
+            }}</div>
+        <div class="col-md-4 mb-3">{{ form.quantity.label(class="form-label") }}{{ form.quantity(class="form-control")
+            }}</div>
+        <div class="col-md-4 mb-3">{{ form.unit.label(class="form-label") }}{{ form.unit(class="form-select") }}</div>
+        <div class="col-md-4 mb-3">{{ form.unit_price.label(class="form-label") }}{{
+            form.unit_price(class="form-control") }}</div>
+        <div class="col-md-4 mb-3">{{ form.sale_date.label(class="form-label") }}{{ form.sale_date(class="form-control")
+            }}</div>
+        <div class="col-md-4 mb-3">{{ form.buyer_name.label(class="form-label") }}{{
+            form.buyer_name(class="form-control") }}</div>
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Revenue vs Cost</h5>
+                <canvas id="revenueCostChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Profit by Crop</h5>
+                <canvas id="profitChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4>Recorded Sales</h4>
+        {% for sale in sales_list %}
+        <div class="border rounded p-2 mb-2">
+            <strong>{{ sale.crop_name }}</strong> - {{ sale.quantity }} {{ sale.unit }}
+            <br>UGX {{ sale.total_amount }} on {{ sale.sale_date }}
+        </div>
+        {% else %}
+        <p>No sales recorded yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+<!-- In your template, BEFORE the chart script -->
+<script id="chart-data" type="application/json">
+  {
+    "labels":   {{ chart_labels | default([]) | tojson }},
+    "revenues": {{ chart_revenues | default([]) | tojson }},
+    "costs":    {{ chart_costs | default([]) | tojson }},
+    "profits":  {{ chart_profits | default([]) | tojson }}
+  }
+</script>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const data = JSON.parse(document.getElementById('chart-data').textContent);
+    const labels = data.labels;
+    const revenues = data.revenues;
+    const costs = data.costs;
+    const profits = data.profits;
+
+    const revenueCostCanvas = document.getElementById('revenueCostChart');
+    if (revenueCostCanvas) {
+        new Chart(revenueCostCanvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: revenues,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Cost',
+                        data: costs,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    const profitCanvas = document.getElementById('profitChart');
+    if (profitCanvas) {
+        new Chart(profitCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Profit',
+                        data: profits,
+                        fill: false,
+                        tension: 0.2,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

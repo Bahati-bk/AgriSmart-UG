@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}My Crop Reports{% endblock %}
+{% block content %}
+<h2>My Crop Reports</h2>
+{% for report in reports %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h4>{{ report.crop_name }}</h4>
+        <p><strong>Symptoms:</strong> {{ report.symptom_description }}</p>
+        <p><strong>Issue:</strong> {{ report.suspected_issue }}</p>
+        <p><strong>Recommendation:</strong> {{ report.recommendation }}</p>
+        <p><strong>Status:</strong> {{ report.status }}</p>
+        {% if report.image_path %}
+        <img src="{{ url_for('static', filename=report.image_path) }}" width="200" class="img-fluid rounded mb-2">
+        {% endif %}
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('farmer.edit_crop_report', report_id=report.id) }}"
+                class="btn btn-warning btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('farmer.delete_crop_report', report_id=report.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+            <form method="POST" action="{{ url_for('farmer.delete_crop_report', report_id=report.id) }}">
+                {{ delete_form.hidden_tag() }}
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No crop reports yet.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}New Crop Report{% endblock %}
+{% block content %}
+<h2>Submit Crop Report</h2>
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ form.crop_name.label }} {{ form.crop_name() }}
+    {{ form.symptom_description.label }} {{ form.symptom_description(rows=5) }}
+    {{ form.image.label }} {{ form.image() }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

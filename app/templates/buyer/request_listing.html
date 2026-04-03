@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Request Listing{% endblock %}
+
+{% block content %}
+<h2>Request Produce</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>{{ listing.crop_name }}</h5>
+        <p>{{ listing.quantity }} {{ listing.unit }} · UGX {{ listing.price }}</p>
+        <p>{{ listing.location }}</p>
+        <small>Farmer: {{ listing.farmer.full_name }}</small>
+    </div>
+</div>
+
+<form method="POST" class="card shadow-sm p-4">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.message.label(class="form-label") }}
+        {{ form.message(class="form-control", rows="5") }}
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

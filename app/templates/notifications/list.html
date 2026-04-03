@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Notifications</h2>
+    <a href="{{ url_for('notifications.mark_all_as_read') }}" class="btn btn-success btn-sm">Mark All as Read</a>
+</div>
+
+{% for notification in notifications %}
+<div class="card shadow-sm mb-3 {% if not notification.is_read %}border-warning{% endif %}">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5>{{ notification.title }}</h5>
+                <p class="mb-1">{{ notification.message }}</p>
+                <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            {% if not notification.is_read %}
+            <div>
+                <a href="{{ url_for('notifications.mark_as_read', notification_id=notification.id) }}"
+                    class="btn btn-outline-success btn-sm">
+                    Mark as Read
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No notifications available.</p>
+{% endfor %}
+{% endblock %}

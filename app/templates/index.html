@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Home - AgriSmart UG{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">AgriSmart UG</h1>
+        <p class="col-md-8 fs-5">
+            Helping Ugandan farmers diagnose crop problems, track records, access advisories, and connect with buyers.
+        </p>
+        <a class="btn btn-success btn-lg" href="{{ url_for('auth.register') }}">Get Started</a>
+    </div>
+</div>
+
+<h2 class="mb-3">Recent Produce Listings</h2>
+<div class="row">
+    {% for listing in recent_listings %}
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5>{{ listing.crop_name }}</h5>
+                <p>{{ listing.quantity }} {{ listing.unit }}</p>
+                <p>UGX {{ listing.price }}</p>
+                <p>{{ listing.location }}</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No listings yet.</p>
+    {% endfor %}
+</div>
+
+<h2 class="mb-3">Latest Advisories</h2>
+<div class="row">
+    {% for advisory in advisories %}
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5>{{ advisory.title }}</h5>
+                <p>{{ advisory.content[:120] }}...</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No advisories yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

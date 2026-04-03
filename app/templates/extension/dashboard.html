@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Extension Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Extension Worker Dashboard</h2>
+
+{% for report in reports %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h5>{{ report.crop_name }}</h5>
+        <p><strong>Farmer:</strong> {{ report.farmer.full_name }}</p>
+        <p><strong>Symptoms:</strong> {{ report.symptom_description }}</p>
+        <a href="{{ url_for('extension.add_note', report_id=report.id) }}" class="btn btn-success btn-sm">
+            Add Advice
+        </a>
+    </div>
+</div>
+{% else %}
+<p>No crop reports available.</p>
+{% endfor %}
+{% endblock %}

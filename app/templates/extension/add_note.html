@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Add Extension Note{% endblock %}
+
+{% block content %}
+<h2>Add Advice for {{ report.crop_name }}</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <p><strong>Farmer:</strong> {{ report.farmer.full_name }}</p>
+        <p><strong>Symptoms:</strong> {{ report.symptom_description }}</p>
+    </div>
+</div>
+
+<form method="POST" class="card shadow-sm p-4">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.note.label(class="form-label") }}
+        {{ form.note(class="form-control", rows="5") }}
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

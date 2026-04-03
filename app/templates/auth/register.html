@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<h2>Create Account</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.full_name.label }} {{ form.full_name() }}
+    {{ form.email.label }} {{ form.email() }}
+    {{ form.phone.label }} {{ form.phone() }}
+    {{ form.district.label }} {{ form.district() }}
+    {{ form.role.label }} {{ form.role() }}
+    {{ form.password.label }} {{ form.password() }}
+    {{ form.confirm_password.label }} {{ form.confirm_password() }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

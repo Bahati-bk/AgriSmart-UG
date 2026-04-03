@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Farm Records{% endblock %}
+{% block content %}
+<h2>Farm Records</h2>
+<a class="btn btn-success mb-3" href="{{ url_for('farmer.add_farm_record') }}">Add Record</a>
+
+{% for record in records %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h4>{{ record.crop_name }}</h4>
+        <p>{{ record.activity_type }} on {{ record.activity_date }}</p>
+        <p>Cost: UGX {{ record.cost }}</p>
+        <p>{{ record.notes }}</p>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('farmer.edit_farm_record', record_id=record.id) }}"
+                class="btn btn-warning btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('farmer.delete_farm_record', record_id=record.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No farm records yet.</p>
+{% endfor %}
+{% endblock %}

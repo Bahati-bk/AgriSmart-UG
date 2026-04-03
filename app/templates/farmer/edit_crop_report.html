@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Edit Crop Report{% endblock %}
+{% block content %}
+<h2>Edit Crop Report</h2>
+<form method="POST" class="card shadow-sm p-4">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.crop_name.label(class="form-label") }}
+        {{ form.crop_name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.symptom_description.label(class="form-label") }}
+        {{ form.symptom_description(class="form-control", rows="5") }}
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Advisories{% endblock %}
+{% block content %}
+<h2>Agricultural Advisories</h2>
+{% for advisory in advisories %}
+<div class="card">
+    <h3>{{ advisory.title }}</h3>
+    <p><strong>Category:</strong> {{ advisory.category or "General" }}</p>
+    <p><strong>District:</strong> {{ advisory.district or "All" }}</p>
+    <p>{{ advisory.content }}</p>
+</div>
+{% else %}
+<p>No advisories available.</p>
+{% endfor %}
+{% endblock %}

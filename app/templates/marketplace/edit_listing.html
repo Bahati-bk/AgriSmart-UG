@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Edit Listing{% endblock %}
+{% block content %}
+<h2>Edit Produce Listing</h2>
+<form method="POST" class="card shadow-sm p-4">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.crop_name.label(class="form-label") }}{{ form.crop_name(class="form-control") }}</div>
+    <div class="mb-3">{{ form.quantity.label(class="form-label") }}{{ form.quantity(class="form-control") }}</div>
+    <div class="mb-3">{{ form.unit.label(class="form-label") }}{{ form.unit(class="form-select") }}</div>
+    <div class="mb-3">{{ form.price.label(class="form-label") }}{{ form.price(class="form-control") }}</div>
+    <div class="mb-3">{{ form.location.label(class="form-label") }}{{ form.location(class="form-control") }}</div>
+    <div class="mb-3">{{ form.harvest_date.label(class="form-label") }}{{ form.harvest_date(class="form-control") }}
+    </div>
+    <div class="mb-3">{{ form.description.label(class="form-label") }}{{ form.description(class="form-control",
+        rows="4") }}</div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

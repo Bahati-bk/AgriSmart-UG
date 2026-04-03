@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Farm Record{% endblock %}
+{% block content %}
+<h2>Edit Farm Record</h2>
+<form method="POST" class="card shadow-sm p-4">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.crop_name.label(class="form-label") }}{{ form.crop_name(class="form-control") }}</div>
+    <div class="mb-3">{{ form.activity_type.label(class="form-label") }}{{ form.activity_type(class="form-select") }}
+    </div>
+    <div class="mb-3">{{ form.activity_date.label(class="form-label") }}{{ form.activity_date(class="form-control") }}
+    </div>
+    <div class="mb-3">{{ form.cost.label(class="form-label") }}{{ form.cost(class="form-control") }}</div>
+    <div class="mb-3">{{ form.notes.label(class="form-label") }}{{ form.notes(class="form-control", rows="4") }}</div>
+    {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

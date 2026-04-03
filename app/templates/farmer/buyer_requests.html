@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Buyer Requests{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Buyer Requests</h2>
+
+{% for req in requests %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h5>{{ req.listing.crop_name }}</h5>
+        <p><strong>Buyer:</strong> {{ req.buyer.full_name }}</p>
+        <p><strong>Message:</strong> {{ req.message }}</p>
+        <p><strong>Status:</strong> {{ req.status }}</p>
+
+        {% if req.status == 'pending' %}
+        <div class="d-flex gap-2">
+            <form method="POST" action="{{ url_for('farmer.approve_buyer_request', request_id=req.id) }}">
+                {{ approve_forms[req.id].hidden_tag() }}
+                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('farmer.reject_buyer_request', request_id=req.id) }}">
+                {{ reject_forms[req.id].hidden_tag() }}
+                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<p>No buyer requests yet.</p>
+{% endfor %}
+{% endblock %}

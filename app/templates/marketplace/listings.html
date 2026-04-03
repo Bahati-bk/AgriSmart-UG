@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Marketplace{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Marketplace</h2>
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-10">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search crop name" class="form-control">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-success w-100">Search</button>
+    </div>
+</form>
+
+{% if current_user.is_authenticated and current_user.role == 'farmer' %}
+<a class="btn btn-primary mb-3" href="{{ url_for('marketplace.create_listing') }}">Create Listing</a>
+{% endif %}
+
+<div class="row">
+    {% for listing in listings %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5>{{ listing.crop_name }}</h5>
+                <p class="mb-1">{{ listing.quantity }} {{ listing.unit }}</p>
+                <p class="mb-1">UGX {{ listing.price }}</p>
+                <p class="mb-1">{{ listing.location }}</p>
+                <p>{{ listing.description }}</p>
+                <small class="text-muted">Posted by {{ listing.farmer.full_name }}</small>
+
+                <div class="mt-3 d-flex gap-2 flex-wrap">
+                    {% if current_user.is_authenticated and current_user.role == 'buyer' %}
+                    <a href="{{ url_for('buyer.request_listing', listing_id=listing.id) }}"
+                        class="btn btn-success btn-sm">
+                        Request
+                    </a>
+                    {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.role == 'farmer' and listing.farmer_id ==
+                    current_user.id %}
+                    <a href="{{ url_for('marketplace.edit_listing', listing_id=listing.id) }}"
+                        class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+                    <form method="POST" action="{{ url_for('marketplace.delete_listing', listing_id=listing.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No listings found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

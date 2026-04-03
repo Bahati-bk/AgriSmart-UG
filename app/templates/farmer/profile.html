@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<h2>Farmer Profile</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.farm_size.label }} {{ form.farm_size() }}
+    {{ form.farm_location.label }} {{ form.farm_location() }}
+    {{ form.main_crops.label }} {{ form.main_crops() }}
+    {{ form.preferred_language.label }} {{ form.preferred_language() }}
+    {{ form.farming_type.label }} {{ form.farming_type() }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

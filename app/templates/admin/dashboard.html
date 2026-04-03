@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ users_count }}</h3>
+                <p class="mb-0">Users</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ reports_count }}</h3>
+                <p class="mb-0">Crop Reports</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ listings_count }}</h3>
+                <p class="mb-0">Listings</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3>{{ activities_count }}</h3>
+                <p class="mb-0">Farm Activities</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Crop Reports by Crop</h5>
+                <canvas id="cropReportsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Listings by Crop</h5>
+                <canvas id="listingsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4>Post Advisory</h4>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">{{ form.title.label(class="form-label") }}{{ form.title(class="form-control") }}</div>
+            <div class="mb-3">{{ form.category.label(class="form-label") }}{{ form.category(class="form-control") }}
+            </div>
+            <div class="mb-3">{{ form.district.label(class="form-label") }}{{ form.district(class="form-control") }}
+            </div>
+            <div class="mb-3">{{ form.content.label(class="form-label") }}{{ form.content(class="form-control",
+                rows="5") }}</div>
+            {{ form.submit(class="btn btn-success") }}
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4>Recent Crop Reports</h4>
+        {% for report in recent_reports %}
+        <div class="border rounded p-3 mb-2">
+            <h5>{{ report.crop_name }}</h5>
+            <p>{{ report.symptom_description }}</p>
+            <small><strong>Farmer:</strong> {{ report.farmer.full_name }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const cropReportsChart = new Chart(document.getElementById('cropReportsChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ crop_chart_labels| tojson }},
+    datasets: [{
+        label: 'Crop Reports',
+        data: {{ crop_chart_values| tojson }},
+        borderWidth: 1
+            }]
+        },
+    options: {
+        responsive: true,
+            scales: { y: { beginAtZero: true } }
+    }
+    });
+
+    const listingsChart = new Chart(document.getElementById('listingsChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ listing_chart_labels| tojson }},
+    datasets: [{
+        label: 'Listings',
+        data: {{ listing_chart_values| tojson }}
+            }]
+        },
+    options: {
+        responsive: true
+    }
+    });
+</script>
+{% endblock %}

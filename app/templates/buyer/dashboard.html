@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Buyer Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Buyer Dashboard</h2>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>Available Produce</h4>
+                {% for listing in listings %}
+                <div class="border rounded p-3 mb-3">
+                    <h5>{{ listing.crop_name }}</h5>
+                    <p class="mb-1">{{ listing.quantity }} {{ listing.unit }} · UGX {{ listing.price }}</p>
+                    <p class="mb-1">{{ listing.location }}</p>
+                    <small class="text-muted">Farmer: {{ listing.farmer.full_name }}</small><br>
+                    <a href="{{ url_for('buyer.request_listing', listing_id=listing.id) }}"
+                        class="btn btn-success btn-sm mt-2">
+                        Request Purchase
+                    </a>
+                </div>
+                {% else %}
+                <p>No listings yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4>My Requests</h4>
+                {% for req in requests_made %}
+                <div class="border rounded p-2 mb-2">
+                    <strong>{{ req.listing.crop_name }}</strong>
+                    <p class="mb-1">{{ req.message }}</p>
+                    <small>Status: {{ req.status }}</small>
+                </div>
+                {% else %}
+                <p>No requests made yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
